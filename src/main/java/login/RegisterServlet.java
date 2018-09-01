@@ -1,5 +1,6 @@
 package login;
 
+import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,13 @@ public class RegisterServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("userid", value);
             System.out.println("LoginServlet: bravoooo  ");
+
+            // send welcome email
+            try {
+                EmailSender.send("flaviu@fasttrack.org", "Welcome", "Welcome to our app.");
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
 
             response.sendRedirect("index.jsp");
 
