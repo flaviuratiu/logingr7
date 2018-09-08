@@ -23,25 +23,29 @@ public class RegisterServlet extends HttpServlet {
         DBOper d = new DBOper();
 
         d.register(u, p);
-        int value = d.login(u,p);
+        int value = d.login(u, p);
 
-        if(value!=-1) { // user logat
+        if (value != -1) { // user logat
             HttpSession session = request.getSession();
             session.setAttribute("userid", value);
             System.out.println("LoginServlet: bravoooo  ");
 
             // send welcome email
-            try {
-                EmailSender.send("flaviu@fasttrack.org", "Welcome", "Welcome to our app.");
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        EmailSender.send("flaviu@fasttrackit.org", "Welcome", "Welcome to our app.");
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            runnable.run();
 
             response.sendRedirect("index.jsp");
 
-        }
-        else
-        {
+        } else {
 
             System.out.println("LoginServlet:registration not done correctly ");
             String back = "/register.html";
